@@ -5,4 +5,3 @@ mccabe==0.3
 pyflakes==1.0.0
 flake8==2.5.0
 pytest==3.0.3
-pytz==2016.7
