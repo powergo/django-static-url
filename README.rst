@@ -12,6 +12,28 @@ Django settings file, in views and templates. The idea is to generate a new
 /static/ URL each time the dev server is reloaded and a new URL each time the
 code is deployed in production.
 
+How does it work?
+-----------------
+
+In its simplest form, django-static-url will compute a hash based on the
+current time and insert this hash between the static url prefix (e.g.,
+/static/) and the static file path. The URL will be recomputed every time the
+devserver is reloaded so any changes to static files should be picked up by the
+browser without having to empty of bypass the cache.
+
+In production, you probably do not want the URL to change every time a process
+is reloaded so you can provide the path of a file whose access time will be
+used to compute the hash. For example, we give the path of our uwsgi config
+file because it is accessed only once per deployment.
+
+More strategies will be provided in the future to accommodate various scenarios
+(e.g., load balanced app servers that do not share files).
+
+django-static-url assumes that you know how to configure your production web
+server. Presumably, you are using nginx and have added a location block to
+bypass the python web server to serve your static files. We provide an example
+location block for nginx in the installation instructions below.
+
 Requirements
 ------------
 
@@ -50,7 +72,7 @@ Alternative 2: Add this snippet in your Django Settings (production)
     # (url generated based on access time).
 
     from django_static_url_helper import url_helper
-    settings.STATIC_URL = url_helper.get_static_url_file(
+    STATIC_URL = url_helper.get_static_url_file(
         STATIC_ROOT_URL,
         SOME_IMPORTANT_FILE_PATH, True,
         SECRET_KEY)
@@ -67,7 +89,8 @@ Add this to your urls file (development)
     # Define your urlpatterns here
     urlpatterns = ...
 
-    urlpatterns += staticfiles_dynamicurlpatterns(settings.STATIC_ROOT_URL)
+    if settings.DEBUG:
+        urlpatterns += staticfiles_dynamicurlpatterns(settings.STATIC_ROOT_URL)
 
 
 Add this to your nginx config file (production)
@@ -97,5 +120,4 @@ Signing GPG Key
 
 The following GPG keys can be used to sign tags and release files:
 
-- Resulto Development Team: AEC378AB578FF0FC
 - Barthelemy Dagenais: 76320A1B901510C4
