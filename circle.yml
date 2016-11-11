@@ -1,0 +1,13 @@
+general:
+  artifacts:
+    - "htmlcov"
+machine:
+  python:
+    version: 3.5.2
+dependencies:
+  override:
+    - pip install -r requirements-test.txt
+test:
+  override:
+    - py.test --cov=django_static_url_helper --cov-report html:htmlcov
+    - flake8
