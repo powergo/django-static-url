@@ -55,8 +55,10 @@ Add this snippet in your Django Settings (development)
 
 ::
 
-    # Will change the URL everytime the settings/server is reloaded.
+    # The prefix of the static URL.
+    STATIC_ROOT_URL = "/static/"
 
+    # Will change the URL everytime the settings/server is reloaded.
     from django_static_url_helper import url_helper
     STATIC_URL = url_helper.get_static_url_now(
         STATIC_ROOT_URL, True, SECRET_KEY)
@@ -68,9 +70,11 @@ Alternative 2: Add this snippet in your Django Settings (production)
 
 ::
 
+    # The prefix of the static URL.
+    STATIC_ROOT_URL = "/static/"
+
     # Will change the URL everything the SOME_IMPORTANT_FILE_PATH is touched
     # (url generated based on access time).
-
     from django_static_url_helper import url_helper
     STATIC_URL = url_helper.get_static_url_file(
         STATIC_ROOT_URL,
