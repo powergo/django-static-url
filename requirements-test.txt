@@ -4,4 +4,4 @@ pep8==1.6.2
 mccabe==0.3
 pyflakes==1.0.0
 flake8==2.5.0
-pytest==3.0.3
+pytest==9.0.3
